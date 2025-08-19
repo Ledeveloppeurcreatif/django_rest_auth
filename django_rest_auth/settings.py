@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'cloudinary_storage',
 ]
 
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 # -----------------------------
 # Middleware
 # -----------------------------
@@ -153,7 +156,6 @@ STATIC_URL = '/static/'
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dodgzhy3g' ,
