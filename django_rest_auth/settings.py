@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 # -----------------------------
@@ -148,8 +150,16 @@ USE_TZ = True
 # Fichiers statiques et médias
 # -----------------------------
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dodgzhy3g',
+    'API_KEY': '171366167264653',
+    'API_SECRET': 'liPtsV08cRvm-BUxUY_Qef2aUQc'
+}
 
 # -----------------------------
 # Email

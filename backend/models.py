@@ -10,7 +10,7 @@ class Mission(models.Model):
     ]
 
     id = models.AutoField(primary_key=True)
-    image = models.ImageField(upload_to='Mission', null=False)
+    image = models.ImageField()
     titre = models.CharField(max_length=255)
     prix = models.CharField(max_length=255)
     date = models.DateTimeField()
@@ -26,7 +26,7 @@ class Mission(models.Model):
 
 class Categorie(models.Model):
     id = models.AutoField(primary_key=True)
-    photo = models.ImageField(upload_to='Categorie', null=False)
+    photo = models.ImageField()
     titre = models.CharField(max_length=255)
 
 
