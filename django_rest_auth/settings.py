@@ -1,43 +1,28 @@
-import environ
 from pathlib import Path
 from datetime import timedelta
 import os
+from dotenv import load_dotenv
 
-# chemin de base du projet
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))  # Assure-toi que BASE_DIR est défini
-
-
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# -----------------------------
+# Chemin de base du projet
+# -----------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Take environment variables from .env file
-#environ.Env.read_env(BASE_DIR / '.env')
+# -----------------------------
+# Charger le fichier .env
+# -----------------------------
+load_dotenv(BASE_DIR / ".env")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+# -----------------------------
+# Paramètres de sécurité
+# -----------------------------
+SECRET_KEY = os.getenv("SECRET_KEY")
+DEBUG = os.getenv("DEBUG", "False") == "True"
+ALLOWED_HOSTS = ['*']  # à changer pour la prod
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
-# SECURITY WARNING: don't run with debug turned on in production!
-
-
-# False if not in os.environ because of casting above
-DEBUG = env('DEBUG')
-
-
-ALLOWED_HOSTS = ['*']
-
-
-# Application definition
-
+# -----------------------------
+# Applications installées
+# -----------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,9 +36,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
-    
 ]
 
+# -----------------------------
+# Middleware
+# -----------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -65,14 +52,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS=True
-CORS_ALLOW_CREDENTIALS=True
-CSRF_TRUSTED_ORIGINS = [
-    "*"
-]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = [ "http://localhost:5173"]
+
 ROOT_URLCONF = 'django_rest_auth.urls'
 
-
+# -----------------------------
+# Templates
+# -----------------------------
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -93,10 +81,9 @@ WSGI_APPLICATION = 'django_rest_auth.wsgi.application'
 
 AUTH_USER_MODEL = "accounts.User"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
+# -----------------------------
+# Base de données
+# -----------------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -104,75 +91,71 @@ DATABASES = {
     }
 }
 
-REST_FRAMEWORK={
-    'NON_FIELD_ERRORS_KEY':'error',
-        'DEFAULT_AUTHENTICATION_CLASSES': (
+# -----------------------------
+# REST Framework
+# -----------------------------
+REST_FRAMEWORK = {
+    'NON_FIELD_ERRORS_KEY': 'error',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
-
 }
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-DOMAIN='http://localhost:5173',
-SITE_NAME = 'authtest'
+# -----------------------------
+# Social auth
+# -----------------------------
+DOMAIN = 'http://localhost:5173'
+SITE_NAME = 'django_rest_auth'
 
-GOOGLE_CLIENT_ID=env("GOOGLE_CLIENT_ID")
-GOOGLE_CLIENT_SECRET=env("GOOGLE_CLIENT_SECRET")
-GITHUB_SECRET=env("GITHUB_SECRET")
-GITHUB_CLIENT_ID=env("GITHUB_CLIENT_ID")
-SOCIAL_AUTH_PASSWORD="jgk348030gjw03"
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
+GITHUB_SECRET = os.getenv("GITHUB_SECRET")
+SOCIAL_AUTH_PASSWORD = "jgk348030gjw03"
 
-
+# -----------------------------
 # Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
+# -----------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
+# -----------------------------
+# Internationalisation
+# -----------------------------
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = 'static/'
+# -----------------------------
+# Fichiers statiques et médias
+# -----------------------------
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+# -----------------------------
+# Email
+# -----------------------------
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = 'ahiaboremmanuel9@gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 2525
 
+# -----------------------------
+# Clé par défaut pour les modèles
+# -----------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-EMAIL_HOST='smtp.mailtrap.io'
-EMAIL_HOST_USER=env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD=env('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL='ahiaboremmanuel9@gmail.com'
-EMAIL_USE_TLS=True
-EMAIL_PORT = '2525'
