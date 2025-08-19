@@ -1,6 +1,7 @@
 from pathlib import Path
 from datetime import timedelta
 import os
+import dj_database_url
 from dotenv import load_dotenv
 
 # -----------------------------
@@ -92,12 +93,10 @@ AUTH_USER_MODEL = "accounts.User"
 # Base de données
 # -----------------------------
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default='postgresql://admin_rwc5_user:dfVAe5J43iFMbGzU8VHJckyVm2ZAhWxN@dpg-d28rhchr0fns73eo743g-a.oregon-postgres.render.com/admin_rwc5'
+    )
 }
-
 # -----------------------------
 # REST Framework
 # -----------------------------
