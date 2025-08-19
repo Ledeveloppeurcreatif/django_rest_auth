@@ -18,7 +18,13 @@ load_dotenv(BASE_DIR / ".env")
 # -----------------------------
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False") == "True"
-ALLOWED_HOSTS = ['*']  # à changer pour la prod
+
+ALLOWED_HOSTS = [
+    "quickhelpapi.onrender.com",  
+    "127.0.0.1",                  
+    "localhost",                  
+]
+
 
 # -----------------------------
 # Applications installées
@@ -54,7 +60,8 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = [ "http://localhost:5173"]
+CSRF_TRUSTED_ORIGINS = [ "http://localhost:5173", 
+                        "https://quickhelpapi.onrender.com"]
 
 ROOT_URLCONF = 'django_rest_auth.urls'
 
