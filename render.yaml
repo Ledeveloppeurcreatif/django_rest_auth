@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: django_rest_auth
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn django_rest_auth.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: django_rest_auth.settings

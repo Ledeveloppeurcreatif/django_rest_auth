@@ -1,6 +1,15 @@
 import environ
 from pathlib import Path
 from datetime import timedelta
+import os
+
+# chemin de base du projet
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))  # Assure-toi que BASE_DIR est défini
+
 
 env = environ.Env(
     # set casting, default value
@@ -10,7 +19,7 @@ env = environ.Env(
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Take environment variables from .env file
-environ.Env.read_env(BASE_DIR / '.env')
+#environ.Env.read_env(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -24,7 +33,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 
-ALLOWED_HOSTS = ['*', 'http://localhost:3000']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'backend',
     'social_accounts',
     'rest_framework',
     'corsheaders',
@@ -58,7 +68,7 @@ MIDDLEWARE = [
 CORS_ALLOW_ALL_ORIGINS=True
 CORS_ALLOW_CREDENTIALS=True
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
+    "*"
 ]
 ROOT_URLCONF = 'django_rest_auth.urls'
 
@@ -81,7 +91,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_rest_auth.wsgi.application'
 
-AUTH_USER_MODEL='accounts.User'
+AUTH_USER_MODEL = "accounts.User"
 
 
 # Database
@@ -108,8 +118,8 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-DOMAIN='localhost:3000'
-SITE_NAME = 'Henry Ultimate Authentication Course'
+DOMAIN='http://localhost:5173',
+SITE_NAME = 'authtest'
 
 GOOGLE_CLIENT_ID=env("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET=env("GOOGLE_CLIENT_SECRET")
@@ -153,6 +163,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -161,6 +173,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_HOST='smtp.mailtrap.io'
 EMAIL_HOST_USER=env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD=env('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL='info@henryjwtauth.com'
+DEFAULT_FROM_EMAIL='ahiaboremmanuel9@gmail.com'
 EMAIL_USE_TLS=True
 EMAIL_PORT = '2525'
